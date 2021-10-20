@@ -1,0 +1,15 @@
+artifact_uri: file:///home/sheisslinux/genre_classification/mlruns/0/4a3d00e6e13d46babcba2149c79c6e67/artifacts
+end_time: 1634690637796
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 4a3d00e6e13d46babcba2149c79c6e67
+run_uuid: 4a3d00e6e13d46babcba2149c79c6e67
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1634690603321
+status: 3
+tags: []
+user_id: sheisslinux

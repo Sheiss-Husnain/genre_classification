@@ -1,0 +1,104 @@
+[1mdiff --git a/main.py b/main.py[m
+[1mindex bcd6f56..6709e2f 100644[m
+[1m--- a/main.py[m
+[1m+++ b/main.py[m
+[36m@@ -20,8 +20,8 @@[m [mdef go(config: DictConfig):[m
+         # This was passed on the command line as a comma-separated list of steps[m
+         steps_to_execute = config["main"]["execute_steps"].split(",")[m
+     else:[m
+[31m-        assert isinstance(config["main"]["execute_steps"], list)[m
+[31m-        steps_to_execute = config["main"]["execute_steps"][m
+[32m+[m
+[32m+[m[32m        steps_to_execute = list(config["main"]["execute_steps"])[m
+ [m
+     # Download step[m
+     if "download" in steps_to_execute:[m
+[36m@@ -38,36 +38,73 @@[m [mdef go(config: DictConfig):[m
+         )[m
+ [m
+     if "preprocess" in steps_to_execute:[m
+[31m-[m
+[31m-        ## YOUR CODE HERE: call the preprocess step[m
+[31m-        pass[m
+[32m+[m[32m        _ = mlflow.run([m
+[32m+[m[32m            os.path.join(root_path, "preprocess"),[m
+[32m+[m[32m            "main",[m
+[32m+[m[32m            parameters={[m
+[32m+[m[32m                "input_artifact": "raw_data.parquet:latest",[m
+[32m+[m[32m                "artifact_name": "preprocessed_data.csv",[m
+[32m+[m[32m                "artifact_type": "preprocessed_data",[m
+[32m+[m[32m                "artifact_description": "Data with preprocessing applied"[m
+[32m+[m[32m            },[m
+[32m+[m[32m        )[m
+ [m
+     if "check_data" in steps_to_execute:[m
+[31m-[m
+[31m-        ## YOUR CODE HERE: call the check_data step[m
+[31m-        pass[m
+[32m+[m[32m        _ = mlflow.run([m
+[32m+[m[32m            os.path.join(root_path, "check_data"),[m
+[32m+[m[32m            "main",[m
+[32m+[m[32m            parameters={[m
+[32m+[m[32m                "reference_artifact": config["data"]["reference_dataset"],[m
+[32m+[m[32m                "sample_artifact": "preprocessed_data.csv:latest",[m
+[32m+[m[32m                "ks_alpha": config["data"]["ks_alpha"][m
+[32m+[m[32m            },[m
+[32m+[m[32m        )[m
+ [m
+     if "segregate" in steps_to_execute:[m
+ [m
+[31m-        ## YOUR CODE HERE: call the segregate step[m
+[31m-        pass[m
+[32m+[m[32m        _ = mlflow.run([m
+[32m+[m[32m            os.path.join(root_path, "segregate"),[m
+[32m+[m[32m            "main",[m
+[32m+[m[32m            parameters={[m
+[32m+[m[32m                "input_artifact": "preprocessed_data.csv:latest",[m
+[32m+[m[32m                "artifact_root": "data",[m
+[32m+[m[32m                "artifact_type": "segregated_data",[m
+[32m+[m[32m                "test_size": config["data"]["test_size"],[m
+[32m+[m[32m                "stratify": config["data"]["stratify"][m
+[32m+[m[32m            },[m
+[32m+[m[32m        )[m
+ [m
+     if "random_forest" in steps_to_execute:[m
+[31m-[m
+         # Serialize decision tree configuration[m
+         model_config = os.path.abspath("random_forest_config.yml")[m
+ [m
+         with open(model_config, "w+") as fp:[m
+             fp.write(OmegaConf.to_yaml(config["random_forest_pipeline"]))[m
+ [m
+[31m-        ## YOUR CODE HERE: call the random_forest step[m
+[31m-        pass[m
+[32m+[m[32m        _ = mlflow.run([m
+[32m+[m[32m            os.path.join(root_path, "random_forest"),[m
+[32m+[m[32m            "main",[m
+[32m+[m[32m            parameters={[m
+[32m+[m[32m                "train_data": "data_train.csv:latest",[m
+[32m+[m[32m                "model_config": model_config,[m
+[32m+[m[32m                "export_artifact": config["random_forest_pipeline"]["export_artifact"],[m
+[32m+[m[32m                "random_seed": config["main"]["random_seed"],[m
+[32m+[m[32m                "val_size": config["data"]["test_size"],[m
+[32m+[m[32m                "stratify": config["data"]["stratify"][m
+[32m+[m[32m            },[m
+[32m+[m[32m        )[m
+ [m
+     if "evaluate" in steps_to_execute:[m
+ [m
+[31m-        ## YOUR CODE HERE: call the evaluate step[m
+[31m-        pass[m
+[32m+[m[32m        _ = mlflow.run([m
+[32m+[m[32m            os.path.join(root_path, "evaluate"),[m
+[32m+[m[32m            "main",[m
+[32m+[m[32m            parameters={[m
+[32m+[m[32m                "model_export": f"{config['random_forest_pipeline']['export_artifact']}:latest",[m
+[32m+[m[32m                "test_data": "data_test.csv:latest"[m
+[32m+[m[32m            },[m
+[32m+[m[32m        )[m
+ [m
+ [m
+ if __name__ == "__main__":[m
+[31m-    go()[m
+[32m+[m[32m    go()[m
+\ No newline at end of file[m

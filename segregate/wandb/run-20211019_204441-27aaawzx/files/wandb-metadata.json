@@ -1,0 +1,35 @@
+{
+    "os": "Linux-5.10.16.3-microsoft-standard-WSL2-x86_64-with-glibc2.31",
+    "python": "3.9.7",
+    "heartbeatAt": "2021-10-20T00:45:03.417260",
+    "startedAt": "2021-10-20T00:44:41.521139",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "--input_artifact",
+        "preprocessed_data.csv:latest",
+        "--artifact_root",
+        "data",
+        "--artifact_type",
+        "segregated_data",
+        "--test_size",
+        "0.3",
+        "--random_state",
+        "42",
+        "--stratify",
+        "genre"
+    ],
+    "state": "running",
+    "program": "/home/sheisslinux/genre_classification/segregate/run.py",
+    "codePath": "segregate/run.py",
+    "git": {
+        "remote": "https://github.com/Sheiss-Husnain/genre_classification.git",
+        "commit": "fa15c38232bda76aafe8520a48197a4e54ca9bcb"
+    },
+    "email": "sheisswaterloo@gmail.com",
+    "root": "/home/sheisslinux/genre_classification",
+    "host": "LAPTOP-FDEEQQRF",
+    "username": "sheisslinux",
+    "executable": "/home/sheisslinux/miniconda3/envs/mlflow-b536c99cab3f07bfeb0a1ad9e153575c07cd087e/bin/python"
+}
